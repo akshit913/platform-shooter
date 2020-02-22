@@ -4,24 +4,17 @@ using UnityEngine;
 
 public class Tap : MonoBehaviour
 {
-    private Vector3 position;
-    private float width;
-    private float height;
     public Vector3 hiddenPosition;
+    public Rigidbody playerRigidBody;
 
     void Awake()
     {
-        width = (float)Screen.width / 2.0f;
-        height = (float)Screen.height / 2.0f;
 
-        // Position used for the cube.
-        position = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
     void OnGUI()
     {
-        // Compute a fontSize based on the size of the screen width.
-        GUI.skin.label.fontSize = (int)(Screen.width / 25.0f);
+
     }
 
     void Update()
@@ -29,18 +22,36 @@ public class Tap : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            temp.z = position.z;
-            position = temp;
-            transform.position = position;
+            temp.z = transform.position.z;
+            transform.position = temp;
         }
         else if(Input.GetMouseButton(0))
         {
 
         }
-        else 
+        else if(Input.GetMouseButtonUp(0))
         {
-            position = hiddenPosition;
-            transform.position = position;
+            Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            /* Jump */
+            if(temp.y - transform.position.y > 1.0f)
+            {
+                /* Jump up right */
+                if(temp.x - transform.position.x > 1.0f)
+                    playerRigidBody.AddForce(Vector3.right * 100.0f);
+                if(transform.position.x - temp.x > 1.0f)
+                    playerRigidBody.AddForce(Vector3.left * 100.0f);
+
+                playerRigidBody.AddForce(Vector3.up * 500.0f);
+            }
+            
+            /* Quick Descent */
+            if(transform.position.y - temp.y > 1.0f)
+            {
+                playerRigidBody.AddForce(Vector3.down * 500.0f);
+            }
+
+            transform.position = hiddenPosition;
         }
     }
 }

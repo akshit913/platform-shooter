@@ -426,6 +426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hiddenPosition: {x: -11, y: -5, z: 0}
+  playerRigidBody: {fileID: 328862199}
 --- !u!135 &1462716229
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -533,6 +534,7 @@ MonoBehaviour:
   hiddenPosition: {x: -11, y: -5, z: 0}
   player: {fileID: 328862198}
   tap: {fileID: 1462716227}
+  playerRigidBody: {fileID: 328862199}
 --- !u!135 &1541403529
 SphereCollider:
   m_ObjectHideFlags: 0

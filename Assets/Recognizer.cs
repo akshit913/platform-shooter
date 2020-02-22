@@ -7,6 +7,7 @@ public class Recognizer : MonoBehaviour
     public Vector3 hiddenPosition;
     public GameObject player;
     public GameObject tap;
+    public Rigidbody playerRigidBody;
 
     void Awake()
     {
@@ -28,8 +29,6 @@ public class Recognizer : MonoBehaviour
                 else
                     player.transform.position -= new Vector3(0.03f,0,0);
             }
-
-
         }
         else 
         {
