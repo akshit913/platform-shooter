@@ -9,7 +9,7 @@ public class Move : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        body.AddForce(Vector3.right * 300.0f);        
+        body.AddForce(Vector3.right * 300.0f);  
     }
 
     // Update is called once per frame
