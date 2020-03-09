@@ -16,6 +16,8 @@ public class Recognizer : MonoBehaviour
     public float movementSense;
     public float jumpSense;
     public GameObject bullet;
+    public GameObject leftBullet;
+    public int touchAreaOffset = 17;
 
     void Awake()
     {
@@ -24,8 +26,6 @@ public class Recognizer : MonoBehaviour
 
     void OnGUI () 
     {
-        GUI.Box(new Rect(0, 0, Screen.width, Screen.height / 2), shootingHalf);
-
         if(tapDownPoint != hiddenPosition) 
         {
             GUI.Box(new Rect(tapDownPoint.x - 10, Screen.height - tapDownPoint.y - 10, 20, 20), tapDownTexture);
@@ -40,7 +40,7 @@ public class Recognizer : MonoBehaviour
             Vector3 temp = Input.mousePosition;
 
             /* Lower half = movement gesture */
-            if(temp.y < Screen.height / 2)
+            if(temp.y < (Screen.height / 2) - touchAreaOffset)
             {
                 tapDownPoint = temp;
             }
@@ -48,11 +48,10 @@ public class Recognizer : MonoBehaviour
             /* Upper half = shooting gesture */
             else
             {
-                if( Mathf.Abs(temp.x - Screen.width / 2) > 20 && Mathf.Abs(temp.y - Screen.height / 2) > 20)
-                {
-                    Instantiate(bullet, new Vector3(player.transform.position.x, player.transform.position.y + 1, 1), new Quaternion(0, 0, 0, 1));
-                }
-
+                if(temp.x < Screen.width / 2)
+                    Instantiate(leftBullet, new Vector3(player.transform.position.x - 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                else
+                    Instantiate(bullet, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
             }
         }
 
