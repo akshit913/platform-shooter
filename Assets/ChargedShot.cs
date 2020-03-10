@@ -13,7 +13,7 @@ public class ChargedShot : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Destroy(other.gameObject);
+        //Destroy(other.gameObject);
         Destroy(gameObject);
     }
 

@@ -23,13 +23,17 @@ public class Recognizer : MonoBehaviour
     public GameObject tapDownPrefab;
     public GameObject tapDragGraphic;
 
-    private List<PDollarGestureRecognizer.Point> gesturePoints;
+    private List<PDollarGestureRecognizer.Point> gesturePoints = new List<PDollarGestureRecognizer.Point>();
     private string message;
     private List<Gesture> trainingSet = new List<Gesture>();
-    
+    void Awake()
+    {
+        
+    }
     void Start()
     {
         tapDragPoint = hiddenPosition;
+        tapDownPoint = hiddenPosition;
         TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("GestureSet/10-stylus-MEDIUM/");
 		foreach (TextAsset gestureXml in gesturesXml)
 		    trainingSet.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
@@ -44,58 +48,28 @@ public class Recognizer : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
         /* Initial tap */
         int num = Input.touchCount;
         if(num > 0)
         {
-            for(int i = 0;i < num;i++){
+            for(int i = 0; i < num; i++)
+            {
                 Touch touch = Input.GetTouch(i);
                 TouchPhase phase = touch.phase;
+
                 if (phase == TouchPhase.Began)
                 {
                     Vector3 temp = Input.mousePosition;
                     tapDownPoint = temp;
                     gesturePoints.Add(new Point(temp.x,temp.y,1));
                 }
-
-                /* Drag */
-                else if (phase == TouchPhase.Moved)
-                {
-                    if(tapDownPoint != hiddenPosition)
-                    {                
-                        tapDragPoint = Input.mousePosition;
-                        gesturePoints.Add(new Point (tapDragPoint.x, tapDragPoint.y, 1));
-
-                        Vector3 t = Camera.main.ScreenToWorldPoint(tapDragPoint);
-                        t.z = 1;
-                        tapDragGraphic.transform.position = t;           
-
-                        /* Lower half = movement gesture */
-                        if(tapDownPoint.y < (Screen.height / 2) - touchAreaOffset)
-                        {
-                            if(Mathf.Abs(tapDragPoint.x - tapDownPoint.x) > movementSense)
-                            {
-                                if(tapDragPoint.x > tapDownPoint.x)
-                                    player.transform.position += new Vector3(0.06f,0,0);
-                                else
-                                    player.transform.position -= new Vector3(0.06f,0,0);
-                            }
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                }
-
-                /* No tap */
-                else 
+                else if(phase == TouchPhase.Ended)
                 {
                     if(tapDownPoint != hiddenPosition)
                     {
                         /* Lower half = movement gesture */
-                        if(tapDownPoint.y < (Screen.height / 2) - touchAreaOffset)
+                        if(tapDownPoint.y < (Screen.height / 2))
                         {
                             if(tapDragPoint.y - tapDownPoint.y > jumpSense)
                             {
@@ -117,14 +91,14 @@ public class Recognizer : MonoBehaviour
                         else
                         {
                             /* The tap down was on the player: Throw */
-                            if( Mathf.Sqrt( Mathf.Pow(tapDownPoint.x - Screen.width / 2, 2) + Mathf.Pow(tapDownPoint.y - Screen.height / 2, 2) ) < 20 )
+                            if( Mathf.Sqrt( Mathf.Pow(tapDownPoint.x - Screen.width / 2, 2) + Mathf.Pow(tapDownPoint.y - Screen.height / 2, 2) ) < 100 )
                             {
                                 Point p = gesturePoints[gesturePoints.Count - 1];
                                 float xMagnitude = p.X - Screen.width / 2;
                                 float yMagnitude = p.Y - Screen.height / 2;
                                 xMagnitude *= -1.0f;
                                 yMagnitude *= -1.0f;
-                                float total = 3 * Mathf.Sqrt( Mathf.Pow(tapDragPoint.x - Screen.width / 2, 2) + Mathf.Pow(tapDragPoint.y - Screen.height / 2, 2) );
+                                float total = Mathf.Sqrt( Mathf.Pow(tapDragPoint.x - Screen.width / 2, 2) + Mathf.Pow(tapDragPoint.y - Screen.height / 2, 2) );
                                 float xForce = (xMagnitude / Mathf.Abs(yMagnitude)) * total;
                                 float yForce = (yMagnitude / Mathf.Abs(xMagnitude)) * total;
 
@@ -160,7 +134,7 @@ public class Recognizer : MonoBehaviour
                                 if(yForce < total * -1.0f)
                                     yForce = total * -1.0f;
 
-                                var clone = Instantiate(chargedShot, new Vector3(player.transform.position.x, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                                var clone = Instantiate(chargedShot, new Vector3(player.transform.position.x, player.transform.position.y + 1, 1), new Quaternion(0, 0, 0, 1));
                                 clone.GetComponent<Rigidbody>().AddForce(new Vector3(xForce, yForce, 0));
                             }
                     
@@ -172,23 +146,49 @@ public class Recognizer : MonoBehaviour
                                 else
                                     Instantiate(bullet, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
                             }
+
+                            Gesture candidate = new Gesture(gesturePoints.ToArray());
+                            Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
+                            message = gestureResult.GestureClass + " " + gestureResult.Score;
+                            if(gestureResult.GestureClass == "D"){
+                                Instantiate(leftBullet, new Vector3(player.transform.position.x - 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                                Instantiate(bullet, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                            }
+                            Debug.Log(message);
                         }
-                        
-                        Gesture candidate = new Gesture(gesturePoints.ToArray());
-                        Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
-                        message = gestureResult.GestureClass + " " + gestureResult.Score;
-                        if(gestureResult.GestureClass == "D"){
-                            Instantiate(leftBullet, new Vector3(player.transform.position.x - 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
-                            Instantiate(bullet, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
-                        }
-                        Debug.Log(message);
                     }
                     tapDragPoint = hiddenPosition;
                     tapDownPoint = hiddenPosition;
                     tapDragGraphic.transform.position = hiddenPosition;
                     gesturePoints.Clear();
                 }
-            }
+                /* Drag */
+                else
+                {
+                    if(tapDownPoint != hiddenPosition)
+                    {                
+                        tapDragPoint = Input.mousePosition;
+                        gesturePoints.Add(new Point (tapDragPoint.x, tapDragPoint.y, 1));
+
+                        Vector3 t = Camera.main.ScreenToWorldPoint(tapDragPoint);
+                        t.z = 1;
+                        tapDragGraphic.transform.position = t;           
+
+                        /* Lower half = movement gesture */
+                        if(tapDownPoint.y < (Screen.height / 2) - touchAreaOffset)
+                        {
+                            if(Mathf.Abs(tapDragPoint.x - tapDownPoint.x) > movementSense)
+                            {
+                                if(tapDragPoint.x > tapDownPoint.x)
+                                    player.transform.position += new Vector3(0.06f,0,0);
+                                else
+                                    player.transform.position -= new Vector3(0.06f,0,0);
+                            }
+                        }
+                    }
+                }
+            }            
         }
+        
     }
 }
