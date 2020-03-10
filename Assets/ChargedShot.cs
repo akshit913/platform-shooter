@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : MonoBehaviour
+public class ChargedShot : MonoBehaviour
 {
-    public Rigidbody body;
 
     // Start is called before the first frame update
     void Start()
     {
-        body.AddForce(Vector3.right * 300.0f);  
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -21,5 +20,6 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
     }
 }

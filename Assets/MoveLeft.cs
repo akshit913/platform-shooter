@@ -12,6 +12,12 @@ public class MoveLeft : MonoBehaviour
         body.AddForce(Vector3.left * 300.0f);        
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        Destroy(other.gameObject);
+        Destroy(gameObject);
+    }
+
     // Update is called once per frame
     void Update()
     {
