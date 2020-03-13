@@ -17,19 +17,22 @@ public class MovingEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        frameNumber++;
-        if(frameNumber >= 120)
+        if (Helper.Distance(transform.position.x, transform.position.y, player.transform.position.x, player.transform.position.y) < 10)
         {
-            frameNumber = 0;
+            frameNumber++;
 
-            if(player.transform.position.x < transform.position.x) 
+            if (frameNumber >= 120)
             {
-                rigidBody.AddForce(Vector3.left * 300);
-            }
-            else
-            {
-                rigidBody.AddForce(Vector3.right * 300);
+                frameNumber = 0;
+
+                if (player.transform.position.x < transform.position.x)
+                {
+                    rigidBody.AddForce(Vector3.left * 300);
+                }
+                else
+                {
+                    rigidBody.AddForce(Vector3.right * 300);
+                }
             }
         }
 
