@@ -9,13 +9,6 @@ public class MoveLeft : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        body.AddForce(Vector3.left * 300.0f);        
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        Destroy(other.gameObject);
-        Destroy(gameObject);
     }
 
     // Update is called once per frame

@@ -13,7 +13,6 @@ public class Recognizer : MonoBehaviour
     public float movementSense;
     public float jumpSense;
     public GameObject bullet;
-    public GameObject leftBullet;
     public GameObject chargedShot;
     public GameObject throwObject;
     public GameObject movementDownGraphic;
@@ -25,14 +24,9 @@ public class Recognizer : MonoBehaviour
     private GestureData shootingGestureData;
     private GestureData movementGestureData;
     private List<GestureData> gestureList = new List<GestureData>();
-    private string message;
     private List<PDollarGestureRecognizer.Point> gesturePoints = new List<PDollarGestureRecognizer.Point>();
     private List<Gesture> trainingSet = new List<Gesture>();
 
-    void Awake()
-    {
-        message = "";
-    }
 
     void Start()
     {
@@ -51,11 +45,6 @@ public class Recognizer : MonoBehaviour
         TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("GestureSet/10-stylus-MEDIUM/");
 		foreach (TextAsset gestureXml in gesturesXml)
 		    trainingSet.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
-    }
-
-    void OnGUI()
-    {
-        GUI.Label(new Rect(10, 10, 100, 20), message, labelStyle);
     }
 
     void Update()
@@ -96,20 +85,18 @@ public class Recognizer : MonoBehaviour
                     // The tap down was on the player: Throw 
                     if(Helper.Distance(shootingGestureData.downPoint.x, shootingGestureData.downPoint.y, Screen.width / 2, Screen.height / 2) < 200)
                     {
-                        message = "throw";
                         Point p = shootingGestureData.gesturePoints[shootingGestureData.gesturePoints.Count - 1];
                         float xForce = Helper.GetXForce(p.X, p.Y, Screen.width / 2, Screen.height / 2, 1.5f * Helper.Distance(p.X, p.Y, Screen.width / 2, Screen.height /2));
                         float yForce = Helper.GetYForce(p.X, p.Y, Screen.width / 2, Screen.height / 2, 1.5f * Helper.Distance(p.X, p.Y, Screen.width / 2, Screen.height /2));
                         xForce *= -1.0f;
                         yForce *= -1.0f;
-                        var clone = Instantiate(throwObject, new Vector3(player.transform.position.x, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                        var clone = Instantiate(throwObject, new Vector3(player.transform.position.x, player.transform.position.y + 1, 1), new Quaternion(0, 0, 0, 1));
                         clone.GetComponent<Rigidbody>().AddForce(new Vector3(xForce, yForce, 0));
                     }
 
                     //long hold: charged shot
                     else if(shootingGestureData.gesturePoints.Count > 30)
                     {
-                        message = "charged";
                         Point p = shootingGestureData.gesturePoints[shootingGestureData.gesturePoints.Count - 1];
                         float xForce = Helper.GetXForce(p.X, p.Y, Screen.width / 2, Screen.height /2, 600.0f);
                         float yForce = Helper.GetYForce(p.X, p.Y, Screen.width / 2, Screen.height /2, 600.0f);
@@ -120,11 +107,16 @@ public class Recognizer : MonoBehaviour
                     //quick shot
                     else
                     {
-                        message = "quick";
                         if(shootingGestureData.downPoint.x < Screen.width / 2)
-                            Instantiate(leftBullet, new Vector3(player.transform.position.x - 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                        {
+                            var c = Instantiate(bullet, new Vector3(player.transform.position.x - 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                            c.GetComponent<Rigidbody>().AddForce(Vector3.left * 400.0f);
+                        }
                         else
-                            Instantiate(bullet, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                        {
+                            var c = Instantiate(bullet, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                            c.GetComponent<Rigidbody>().AddForce(Vector3.right * 400.0f);
+                        }
                     }
 
                     //check for multishot (only if they made a gesture)
@@ -134,8 +126,10 @@ public class Recognizer : MonoBehaviour
                         Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
                         if (gestureResult.GestureClass == "D")
                         {
-                            Instantiate(leftBullet, new Vector3(player.transform.position.x - 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
-                            Instantiate(bullet, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                            var c1 = Instantiate(chargedShot, new Vector3(player.transform.position.x - 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                            c1.GetComponent<Rigidbody>().AddForce(Vector3.left * 400.0f);
+                            var c2 = Instantiate(chargedShot, new Vector3(player.transform.position.x + 1, player.transform.position.y, 1), new Quaternion(0, 0, 0, 1));
+                            c2.GetComponent<Rigidbody>().AddForce(Vector3.right * 400.0f);
                         }
                     }
 
@@ -151,7 +145,6 @@ public class Recognizer : MonoBehaviour
                 {
                     if(Mathf.Abs(movementGestureData.downPoint.y - movementGestureData.dragPoint.y) > Mathf.Abs(movementGestureData.downPoint.x - movementGestureData.dragPoint.x))
                     {
-                        message = "fdfads";
                         float xForce = Helper.GetXForce(movementGestureData.downPoint.x, movementGestureData.downPoint.y, movementGestureData.dragPoint.x, movementGestureData.dragPoint.y, 350.0f);
                         float yForce = Helper.GetYForce(movementGestureData.downPoint.x, movementGestureData.downPoint.y, movementGestureData.dragPoint.x, movementGestureData.dragPoint.y, 350.0f);
                         xForce *= -1.0f;
@@ -183,12 +176,15 @@ public class Recognizer : MonoBehaviour
                     movementGestureData.gesturePoints.Add(new Point(temp.x, temp.y, shootingGestureData.index));
                     movementGestureData.dragPoint = new Vector3(temp.x, temp.y, 1);
 
-                    if(Mathf.Abs(movementGestureData.dragPoint.x - movementGestureData.downPoint.x) > movementSense)
+                    float xMag = Mathf.Abs(movementGestureData.dragPoint.x - movementGestureData.downPoint.x);
+                    float yMag = Mathf.Abs(movementGestureData.dragPoint.y - movementGestureData.downPoint.y);
+
+                    if (xMag > movementSense && xMag > yMag)
                     {
                         if(movementGestureData.dragPoint.x > movementGestureData.downPoint.x)
-                            player.transform.position += new Vector3(0.1f,0,0);
+                            player.transform.position += new Vector3(0.15f,0,0);
                         else
-                            player.transform.position -= new Vector3(0.1f,0,0);
+                            player.transform.position -= new Vector3(0.15f,0,0);
                     }
                 }
                 else

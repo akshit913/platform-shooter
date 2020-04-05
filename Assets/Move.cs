@@ -9,12 +9,10 @@ public class Move : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        body.AddForce(Vector3.right * 300.0f);  
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Destroy(other.gameObject);
         Destroy(gameObject);
     }
 

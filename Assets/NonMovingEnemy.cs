@@ -7,11 +7,32 @@ public class NonMovingEnemy : MonoBehaviour
     private int frameNumber;
     public GameObject player;
     public GameObject chargedShot;
+    private int health;
 
     // Start is called before the first frame update
     void Start()
     {
         frameNumber = 0;
+        health = 3;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag.Equals("ChargedShot"))
+        {
+            Destroy(gameObject);
+        }
+        else if (other.gameObject.tag.Equals("Bullet"))
+        {
+            health--;
+
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        Destroy(other.gameObject);
     }
 
     // Update is called once per frame

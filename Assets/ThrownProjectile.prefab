@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 5577363517128567574}
   - component: {fileID: 54181827669409956}
   - component: {fileID: -8193041310701485606}
+  - component: {fileID: 3855104245660153990}
   m_Layer: 0
   m_Name: ThrownProjectile
-  m_TagString: Untagged
+  m_TagString: ChargedShot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3290816626831382154}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.12, y: -5.29, z: 0.03875253}
+  m_LocalPosition: {x: -9.12, y: -5.29, z: 1}
   m_LocalScale: {x: 0.20703934, y: 0.20703934, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -41,10 +42,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3290816626831382154}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
+  m_IsTrigger: 1
+  m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &54181827669409956
 Rigidbody:
@@ -112,3 +113,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3855104245660153990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3290816626831382154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349b9a0726c32f147bfd7d24cff8312f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
