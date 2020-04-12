@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 71e7fe4208083e242aa41f550373b72a
+    path: Assets/Scenes/CutScene1.unity
+    guid: 2ee50d2b75ed9334b90f1de281b3c39b
+  - enabled: 1
+    path: Assets/Scenes/HardLevel.unity
+    guid: 9fbf595d696551346b2c54db0585ea74
   - enabled: 1
     path: Assets/Scenes/WinScene.unity
     guid: 107c00bc686391546a47458d1bafc194
@@ -17,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StarvedScene.unity
     guid: 65a2a55074bb2814caf406aef22cc1d9
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 71e7fe4208083e242aa41f550373b72a
   m_configObjects: {}

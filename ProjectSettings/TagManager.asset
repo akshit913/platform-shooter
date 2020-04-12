@@ -9,6 +9,7 @@ TagManager:
   - play
   - Chicken
   - Enemy
+  - Lava
   layers:
   - Default
   - TransparentFX

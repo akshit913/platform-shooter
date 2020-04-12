@@ -43,7 +43,7 @@ public class HostageEnemy : MonoBehaviour
         {
             ((SpriteRenderer)GetComponent<SpriteRenderer>()).color = new Color(255, 0, 0);
             Destroy(hostage);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(3);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(4);
         }
     }
 }

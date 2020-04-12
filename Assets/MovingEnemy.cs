@@ -21,6 +21,7 @@ public class MovingEnemy : MonoBehaviour
         if (other.gameObject.tag.Equals("ChargedShot"))
         {
             Destroy(gameObject);
+            Destroy(other.gameObject);
         }
         else if (other.gameObject.tag.Equals("Bullet"))
         {
@@ -30,9 +31,9 @@ public class MovingEnemy : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+            Destroy(other.gameObject);
         }
 
-        Destroy(other.gameObject);
     }
 
     // Update is called once per frame

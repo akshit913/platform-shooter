@@ -20,11 +20,11 @@ public class Hostage : MonoBehaviour
         if (other.gameObject.tag.Equals("ChargedShot") || other.gameObject.tag.Equals("Bullet"))
         {
             Destroy(gameObject);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(3);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(4);
         }
         else if (other.gameObject.tag.Equals("play"))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
     }
 
