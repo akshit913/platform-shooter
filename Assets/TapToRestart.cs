@@ -17,7 +17,8 @@ public class TapToRestart : MonoBehaviour
 
         if(num > 0)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+            Helper.currentScene = Helper.currentLevel;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(Helper.currentLevel);
         }
     }
 }

@@ -39,11 +39,13 @@ public class HostageEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Helper.Distance(transform.position.x, transform.position.y, player.transform.position.x, player.transform.position.y) < 5)
+        if (Helper.Distance(transform.position.x, transform.position.y, player.transform.position.x, player.transform.position.y) < 3)
         {
             ((SpriteRenderer)GetComponent<SpriteRenderer>()).color = new Color(255, 0, 0);
             Destroy(hostage);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(4);
+            Helper.currentLevel = Helper.currentScene;
+            Helper.currentScene = 10;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(Helper.currentScene);
         }
     }
 }

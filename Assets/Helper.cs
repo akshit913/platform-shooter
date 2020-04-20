@@ -3,6 +3,9 @@ using UnityEditor;
 
 public class Helper : ScriptableObject
 {
+    public static int currentLevel = 0;
+    public static int currentScene = 0;
+
     public static float Distance(float x1, float y1, float x2, float y2)
     {
         return Mathf.Sqrt(Mathf.Pow(x1 - x2, 2) + Mathf.Pow(y1 - y2, 2));
