@@ -58,7 +58,7 @@ public class Recognizer : MonoBehaviour
 
             if (phase == TouchPhase.Began)
             {
-                if(temp.y + 20 < Screen.height / 3)
+                if(temp.y + 20 < Screen.height / 2)
                 {
                     movementGestureData.downPoint.x = temp.x;
                     movementGestureData.downPoint.y = temp.y;
@@ -83,11 +83,11 @@ public class Recognizer : MonoBehaviour
                 if(i == shootingGestureData.index)
                 {
                     // The tap down was on the player: Throw 
-                    if(Helper.Distance(shootingGestureData.downPoint.x, shootingGestureData.downPoint.y, Screen.width / 2, Screen.height / 3) < 200)
+                    if(Helper.Distance(shootingGestureData.downPoint.x, shootingGestureData.downPoint.y, Screen.width / 2, Screen.height / 2) < 200)
                     {
                         Point p = shootingGestureData.gesturePoints[shootingGestureData.gesturePoints.Count - 1];
-                        float xForce = Helper.GetXForce(p.X, p.Y, Screen.width / 2, Screen.height / 3, 1.5f * Helper.Distance(p.X, p.Y, Screen.width / 2, Screen.height /3));
-                        float yForce = Helper.GetYForce(p.X, p.Y, Screen.width / 2, Screen.height / 3, 1.5f * Helper.Distance(p.X, p.Y, Screen.width / 2, Screen.height /3));
+                        float xForce = Helper.GetXForce(p.X, p.Y, Screen.width / 2, Screen.height / 2, 1.5f * Helper.Distance(p.X, p.Y, Screen.width / 2, Screen.height /2));
+                        float yForce = Helper.GetYForce(p.X, p.Y, Screen.width / 2, Screen.height / 2, 1.5f * Helper.Distance(p.X, p.Y, Screen.width / 2, Screen.height /2));
                         xForce *= -1.0f;
                         yForce *= -1.0f;
                         var clone = Instantiate(throwObject, new Vector3(player.transform.position.x, player.transform.position.y + 1, 1), new Quaternion(0, 0, 0, 1));
@@ -98,8 +98,8 @@ public class Recognizer : MonoBehaviour
                     else if(shootingGestureData.gesturePoints.Count > 30)
                     {
                         Point p = shootingGestureData.gesturePoints[shootingGestureData.gesturePoints.Count - 1];
-                        float xForce = Helper.GetXForce(p.X, p.Y, Screen.width / 2, Screen.height /3, 600.0f);
-                        float yForce = Helper.GetYForce(p.X, p.Y, Screen.width / 2, Screen.height /3, 600.0f);
+                        float xForce = Helper.GetXForce(p.X, p.Y, Screen.width / 2, Screen.height /2, 600.0f);
+                        float yForce = Helper.GetYForce(p.X, p.Y, Screen.width / 2, Screen.height /2, 600.0f);
                         var clone = Instantiate(chargedShot, new Vector3(player.transform.position.x, player.transform.position.y + 1, 1), new Quaternion(0, 0, 0, 1));
                         clone.GetComponent<Rigidbody>().AddForce(new Vector3(xForce, yForce, 0));
                     }
