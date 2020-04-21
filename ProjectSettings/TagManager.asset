@@ -10,6 +10,7 @@ TagManager:
   - Chicken
   - Enemy
   - Lava
+  - Ground
   layers:
   - Default
   - TransparentFX

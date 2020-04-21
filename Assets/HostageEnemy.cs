@@ -39,7 +39,7 @@ public class HostageEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Helper.Distance(transform.position.x, transform.position.y, player.transform.position.x, player.transform.position.y) < 3)
+        if (Helper.Distance(transform.position.x, transform.position.y, player.transform.position.x, player.transform.position.y) < 4.0f)
         {
             ((SpriteRenderer)GetComponent<SpriteRenderer>()).color = new Color(255, 0, 0);
             Destroy(hostage);

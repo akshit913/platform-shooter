@@ -21,14 +21,25 @@ public class Hostage : MonoBehaviour
         {
             Destroy(gameObject);
             Helper.currentLevel = Helper.currentScene;
-            Helper.currentScene = 8;
-            UnityEngine.SceneManagement.SceneManager.LoadScene(8);
+            Helper.currentScene = 10;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(10);
         }
         else if (other.gameObject.tag.Equals("play"))
         {
-            Helper.currentLevel = Helper.currentScene + 1;
-            Helper.currentScene = 9;
-            UnityEngine.SceneManagement.SceneManager.LoadScene(9);
+            if(Helper.currentScene == 7)
+            {
+                Helper.currentLevel = 11;
+                Helper.currentScene = 9;
+                UnityEngine.SceneManagement.SceneManager.LoadScene(9);
+            }
+            else
+            {
+                Helper.currentLevel = Helper.currentScene + 1;
+                Helper.currentScene = 9;
+                UnityEngine.SceneManagement.SceneManager.LoadScene(9);
+            }
+
+
         }
     }
 
