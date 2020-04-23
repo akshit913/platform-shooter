@@ -145,8 +145,8 @@ public class Recognizer : MonoBehaviour
                 {
                     if(Mathf.Abs(movementGestureData.downPoint.y - movementGestureData.dragPoint.y) > Mathf.Abs(movementGestureData.downPoint.x - movementGestureData.dragPoint.x))
                     {
-                        float xForce = Helper.GetXForce(movementGestureData.downPoint.x, movementGestureData.downPoint.y, movementGestureData.dragPoint.x, movementGestureData.dragPoint.y, 350.0f);
-                        float yForce = Helper.GetYForce(movementGestureData.downPoint.x, movementGestureData.downPoint.y, movementGestureData.dragPoint.x, movementGestureData.dragPoint.y, 350.0f);
+                        float xForce = Helper.GetXForce(movementGestureData.downPoint.x, movementGestureData.downPoint.y, movementGestureData.dragPoint.x, movementGestureData.dragPoint.y, 300.0f);
+                        float yForce = Helper.GetYForce(movementGestureData.downPoint.x, movementGestureData.downPoint.y, movementGestureData.dragPoint.x, movementGestureData.dragPoint.y, 300.0f);
                         xForce *= -1.0f;
                         yForce *= -1.0f;
                         playerRigidBody.AddForce(new Vector3(xForce, yForce, 0));
@@ -184,12 +184,12 @@ public class Recognizer : MonoBehaviour
                         if(movementGestureData.dragPoint.x > movementGestureData.downPoint.x)
                         {
                             player.GetComponent<SpriteRenderer>().flipX = true;
-                            player.transform.position += new Vector3(0.15f, 0, 0);
+                            player.transform.position += new Vector3(0.12f, 0, 0);
                         }
                         else
                         {
                             player.GetComponent<SpriteRenderer>().flipX = false;
-                            player.transform.position -= new Vector3(0.15f, 0, 0);
+                            player.transform.position -= new Vector3(0.12f, 0, 0);
                         }
                     }
                 }
